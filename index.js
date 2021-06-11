@@ -37,8 +37,10 @@ bnbkSymbols = async () => {
   const bkSymbols = bk.map((ea) => ea.symbol)
   const bn2bkSymbols = bnSymbols.filter(el => bkSymbols.map(ea => ea.replace(/^THB_+/i, '')).includes(el.replace("USDT", "")));
   const bk2bnSymbols = bkSymbols.filter(el => bnSymbols.map(ea => ea.replace("USDT", "")).includes(el.replace(/^THB_+/i, "")));
+  // these coin accept only ERC20 
+  const exceptCoin = ["ENJ", "YFI", "CVC", "UNI", "AAVE", "KNC", "MANA", "USDC"]
   const symbols = bn2bkSymbols.map(ea => ea.replace("USDT", ""))
-  const resp = symbols.map(ea => {
+  const resp = symbols.filter(ex => !exceptCoin.includes(ex)).map(ea => {
     return {
       symbol: ea,
       binance: bn.filter(bn => bn.symbol.includes(ea))[0],
@@ -115,10 +117,6 @@ run = async () => {
   message = `\n${timeMsg}\n${fiatMsg}\n${title10bnbk}\n${alloArbMsg.join('\n')} \n`
   return message
 }
-
-
-
-
 
 function print(input) {
   const numberOfLines = (input.match(/\n/g) || []).length;
